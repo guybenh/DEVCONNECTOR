@@ -3,10 +3,10 @@ const connectDB = require('./config/db');
 
 const app = express();
 
-//connect database
+//connect Database
 connectDB();
 
-//Port
+//Port - first look for an enviroment port (when connect to heroku)
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
@@ -15,7 +15,7 @@ app.listen(PORT, () => {
 
 app.get('/', (req, res) => res.send('API is running'));
 
-//Init MiddleWare
+//Init MiddleWare -allows to get the data from req.body
 app.use(express.json({ extended: false }));
 
 //Define routes

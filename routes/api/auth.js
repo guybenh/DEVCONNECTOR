@@ -5,7 +5,7 @@ const User = require("../../models/User");
 const config = require("config");
 const { check, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 
 // @route   GET api/auth
 // @desc    Test route
@@ -21,7 +21,7 @@ router.get("/", auth, async (req, res) => {
 });
 
 // @route   POST api/auth
-// @desc    Authenticate user & get token
+// @desc    Authenticate user & get token -> for log in
 // @access  Public
 router.post(
   "/",
@@ -37,19 +37,15 @@ router.post(
     }
     const { email, password } = req.body;
     try {
-      // see if the user not exists
+      // see if the user not exists (by mail only)
       let user = await User.findOne({ email });
       if (!user) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "User isn't exist" }] });
+        return res.status(400).json({ errors: [{ msg: "User isn't exist" }] });
       }
-      // check if email & password are match
+      // check if password are match to the user found by mail
       const isMatch = await bcrypt.compare(password, user.password);
-      if(!isMatch) {
-          return res
-            .status(400)
-            .json({ errors: [{ msg: "password invalid" }] });
+      if (!isMatch) {
+        return res.status(400).json({ errors: [{ msg: "password invalid" }] });
       }
       // Return jsonwebtoken
       const payload = {

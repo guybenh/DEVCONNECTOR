@@ -42,6 +42,7 @@ router.post(
         r: "pg", //rating
         d: "mm", //default image
       });
+      // create user
       user = new User({
         name,
         email,
@@ -65,8 +66,8 @@ router.post(
         config.get("jwtSecret"),
         { expiresIn: 360000 },
         (err, token) => {
-            if(err) throw err;
-            res.json({ token });
+          if (err) throw err;
+          res.json({ token });
         }
       );
     } catch (err) {
