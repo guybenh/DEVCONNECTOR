@@ -1,6 +1,11 @@
 import React from 'react';
+import { Link } from "react-router-dom";
+import {connect} from 'react-redux';
+import {setAlert} from '../../actions/alert';
+import PropTypes from 'prop-types';
 
-const Register = () => {
+
+const Register = (props) => {
     const [formData, setFormData] =React.useState({
         name: '',
         email: '',
@@ -14,12 +19,12 @@ const Register = () => {
         setFormData({ ...formData, [val.target.name]: val.target.value });
     }
 
-    const onSubmitForm = e => {
+    const onSubmitForm = async e => {
         e.preventDefault();
         if(password !== password2 || !email) {
-            console.log('passwords are not equal or email isnot set..');
+            props.setAlert('passwords are not equal or email is not set..', 'danger');
         }
-        else console.log({formData});
+        else {console.log({formData});}
     }
 
     // React.useEffect(() => console.log('name changed') ,[name]);
@@ -78,10 +83,14 @@ const Register = () => {
           <input type="submit" className="btn btn-primary" value="Register" />
         </form>
         <p className="my-1">
-          Already have an account? <a href="login.html">Sign In</a>
+          Already have an account? <Link to="/login">Sign In</Link>
         </p>
       </div>
     );
 }
 
-export default Register;
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+}
+
+export default connect(null, { setAlert })(Register);
